@@ -1,0 +1,184 @@
+
+Introduction
+------------
+
+Hello, my name is Jeremiah Mahler.
+
+To introduce myself I am going to talk about a project that I did in the past.
+A project that I think really emphasizes my enthusiasm for cars and electronics.
+
+Before I ever took a class on programming or embedded systems.
+Before I ever attended college.
+
+Engine Controller
+-----------------
+
+I built a fully working engine controller from scratch.
+It controlled both the fuel and the ignition of a four
+cylinder gas engine.
+It used a Motorola 68HC12 processor.
+I developed it entirely in Linux. 
+I wrote all the code in C.
+I designed all the interface circuits to the sensors and actuators.
+
+Engine Controller
+-----------------
+
+The plots you see here are from a test drive I took with this controller.
+The blue points are the map sensor with maximum at wide open
+throttle and minimum values during decel.
+The red points are the oxygen sensor with larger values indicating a
+rich mixture and smaller values indicating a lean mixture.
+And the green points are the engine rpm.
+
+It can be seen in the center of the plot that this was a full throttle
+run through three gears.
+In the lower gears the acceleration is more rapid, as seen by the slope
+of the rpm, than in higher gears as you would expect.
+
+And you can see from the date in the top right that I did this in 2005.
+
+Current Projects
+----------------
+
+Currently I am studying Electrical Engineering at Chico State.
+I have one more semester and will graduate in May.
+
+I also work at Chico State at the McLeod Institute of Simulations sciences.
+
+The McLeod Institute is a research project lead by Dr. Crosbie, Dr. Zenor,
+Dr. Kredo and others.
+The primary topic is the development of FPGA based real time simulations.
+Our largest grant is from the Office of Naval Research.
+We are currently simulations of the electric motors used in their naval
+ships as well as in their UUV.
+
+I was among three other students chosen by the professors
+to participate in this project.
+
+Preview
+-------
+
+First I will give you a quick introduction to one of the simulation
+architectures we built at the McLeod Institute.
+Then I will discuss several of the problems that arose during its
+development along with their solutions.
+
+Background: Simulation Architecture
+-----------------------------------
+
+On the left you can see everything inside the FPGA.
+The matrix multiplier is the core computation engine of the simulation.
+It performs floating point matrix vector multiplications.
+The top level manages communication with the matrix multiplier and with
+the PCIe bus through the FIFO interface.
+
+#One of the accomplishments of the McLeod lab was the development
+#of linear models that describe the operation of an electric motor.
+#These linear models can then be computed using a matrix vector multiplication
+#as is done in this architecture.
+
+On the right you can see the control program inside the PC.
+This can be a test program or a user interface such as Simulink.
+
+Problem: Synthesis Time
+-----------------------
+
+One of the first problems we encountered during the development of
+this architecture was the long synthesis time of HDL code.
+With a 20x20 matrix, which is typical for our architecture,
+takes nearly two hours.
+
+HDL Simulation is often an option to speed up development time.
+But in this case it is complicated because of the involvement of the
+PCIe bus.
+How is an entire PCIe bus simulated?
+
+Solution: HDL Simulation of FIFO Interface
+------------------------------------------
+
+The HDL code in the matrix multiplier and top level change
+frequently.
+The PCIe code in the FPGA changes infrequently.
+
+An idea I came up with and implemented was to simulate everything
+after the FIFO interface.
+Then all of the code that changes most frequently can be tested
+in minutes instead of hours.
+
+Problem: Errors Running on FPGA
+-----------------------
+
+All tests of Matrix Multiplier by itself passed.
+All tests of Top level FIFO Simulation passed.
+But sporadic errors occurred when running on the FPGA.
+
+Is there some special case that is not being reproduced in
+the top level FIFO Simulation?
+
+Diagnosis: Probe Matrix Multiplication in Hardware
+--------------------------------------------------
+
+Here you can see an example of what the incorrect results look like.
+It can be seen that the results are completely wrong and nowhere near
+reasonable values.
+
+The first step was to change the test program so that it used an
+identity matrix to see if the problem is isolated to part of the
+input vector.
+And you can see that indeed some of the calculations were correct.
+
+So it appears that the input vector was being partially transferred.
+Perhaps a buffer underrun may be occurring.
+
+Update: Include Underrun in FIFO Simulation
+----------------------------------------------
+
+The first step in resolving this problem is to add the underrun
+condition in to the FIFO Simulation.
+The error the was found when running in the FPGA should be reproduced.
+
+Previously, the ideal case was assumed where the FIFO never became
+empty during a transfer.
+Now the FIFO Simulation produces the worst case where it frequently
+becomes empty during a transfer.
+
+Update: FPGA Error Reproduced in FIFO Simulation
+------------------------------------------------
+
+With the addition of the underrun condition to the FIFO Simulation
+the error when running in the FPGA has now be reproduced in
+in simulation.
+
+
+Problem: Buffer Underruns
+-------------------------
+
+Next I had to determine why this buffer underrun condition
+was was breaking the top level and to devise a way to fix it.
+
+The matrix multiplier has a control input that is used to signal
+when it is taking matrix coefficients or an input vector.
+When a vector is being input a new data value is latched on every
+clock edge.
+This processes cannot be paused.
+
+Solution: Accumulate Input Vector
+---------------------------------
+
+The solution to this problem was to redesign the top level
+so that it accumulates the input vector it receives before
+it is transferred to the matrix multiplier.
+Then it can guarantee that it will be transferred entirely
+without interruption.
+
+Success: Architecture Operating Correctly
+-----------------------------------------
+
+And once all of this work was completed all the tests passed and
+the system was working correctly.
+
+Questions
+---------
+
+Do you have any questions?

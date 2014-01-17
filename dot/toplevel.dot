@@ -1,0 +1,53 @@
+
+// headlabel, taillabel
+// tailport
+// ordering
+// nodesep, ranksep
+// size, ratio
+digraph toplevel {
+	node [fontsize="12.0"];
+	edge [fontsize="12.0"];
+	graph [margin=0];
+	ratio = "auto";
+
+	IDLE [label="idle", style=filled, bgcolor="gray88"];
+	CMD [label="command"];
+	LOAD_MTX [label="load matrix\ncoefficients"];
+	INVEC [label="accumulate\ninput vector"];
+	PIPE_IN [label="input vector\nto multiplier"];
+	WAIT_ANS [label="wait for\nmultiplication"];
+	TX_DATA [label="transmit data"];
+
+	IDLE -> IDLE;
+
+	//IDLE -> CMD [label=" rx_empty=0", labelfloat=false];
+	IDLE -> CMD;
+	CMD -> CMD;
+
+	CMD -> LOAD_MTX [weight=2];
+//	CMD -> FLUSH [weight=2];
+	CMD -> INVEC;
+
+//	FLUSH -> FLUSH;
+//	FLUSH -> IDLE [label=" rx_empty=1   "];
+	//FLUSH -> IDLE [headport="w", tailport="w", constraint=false, label=" rx_empty=1   "];
+
+	LOAD_MTX -> LOAD_MTX [weight=2];
+//	LOAD_MTX -> FLUSH;
+	LOAD_MTX -> IDLE;
+
+	INVEC -> INVEC [weight=2];
+	INVEC -> PIPE_IN [weight=2];
+
+	PIPE_IN -> PIPE_IN;
+	PIPE_IN -> WAIT_ANS [weight=2];
+
+	WAIT_ANS -> WAIT_ANS;
+	//WAIT_ANS -> TX_DATA [weight=2, label=" answer ready=1         "];
+	WAIT_ANS -> TX_DATA [weight=2];
+
+	TX_DATA -> TX_DATA;
+
+	TX_DATA -> IDLE [headport="ne"];
+
+}

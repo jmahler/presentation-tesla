@@ -1,0 +1,140 @@
+
+\documentclass[11pt,letterpaper]{article}
+\usepackage[letterpaper,margin=0.75in]{geometry}
+%\usepackage[margin=3cm]{geometry}
+
+\pagestyle{empty}
+
+% format two pieces of text, one left aligned and one right aligned
+\newcommand{\headerrow}[2]
+{\begin{tabular*}{\linewidth}{l@{\extracolsep{\fill}}r}
+	#1 &
+	#2 \\
+\end{tabular*}}
+
+\begin{document}
+
+\vspace*{0.5em}
+
+\begin{center}
+{\LARGE \textbf{Jeremiah Mahler}}
+
+\vspace{0.2em}
+
+990 Normal Ave\ \ \textbullet
+\ \ Chico, CA 95928
+\\
+(530) 588-0103\ \ \textbullet
+\ \ jmmahler@gmail.com
+\end{center}
+
+\vspace{0.5em}
+
+\subsection*{Experience}
+
+\begin{itemize}
+	\parskip=0.1em
+
+	\item
+	\headerrow
+		{\textbf{McLeod Institute of Simulation Sciences}}
+		{\textbf{Chico, CA}}
+	\\
+	\headerrow
+		{\emph{Research Assistant}}
+		{\emph{March 2012 -- Present}}
+	
+	\begin{itemize}
+		\item background
+		\begin{itemize}
+			\item CSU Chico Research project led by Dr. Roy Crosbie,
+			Dr. John Zenor, Dr. Kurtis Kredo II and others.
+			\item Develops FPGA based electric motor simulations.
+			\item Contracts with The Office of Naval Research as part of
+				their Unmanned Underwater Vehicle project.
+		\end{itemize}
+
+		\item Developed PCIe interfaces for Xilinx FPGAs.
+%			\begin{itemize}
+%			\item Device drivers in Linux and Windows.
+%			\item FPGA code establish FIFO interface.
+%			\end{itemize}
+		\item Developed Ethernet interfaces for Xilinx FPGAs.
+%			\begin{itemize}
+%			\item Socket interface
+%			\item FPGA code to process packets (ARP, IP).
+%			\end{itemize}
+		\item Developed Matlab/Simulink interfaces for motor simulations.
+		\item Led transition to Git for version control.
+			\begin{itemize}
+			\item Resulted in a substantial increase in productivity of
+					the entire project.
+			\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+\begin{itemize}
+	\parskip=0.1em
+
+	\item
+	\headerrow
+		{\textbf{Open Source Developer}}
+		{\textbf{github.com/jmahler}}
+	\\
+	\headerrow
+		{\emph{}}
+		{\emph{2007 -- Present}}
+	\begin{itemize}
+		\item mips-cpu - MIPS CPU implemented in Verilog.
+		\item ldd - Linux device driver examples.
+		\item sprinklerpi - Sprinkler control with Linux on a RasberryPI.
+		\item libtext-loouptable-perl - Text based look up table operations for Perl.
+	\end{itemize}
+
+\end{itemize}
+
+
+
+\begin{itemize}
+	\parskip=0.1em
+
+	\item
+	\headerrow
+		{\textbf{Chico Volkswagen}}
+		{\textbf{Chico, CA}}
+	\\
+	\headerrow
+		{\emph{Master Technician}}
+		{\emph{February 2007 -- May 2009}}
+	\begin{itemize}
+		\item Performed all types of automotive repair and diagnosis.
+		\item ASE Master Certified with Advanced L1
+		\item BAR California Certified, Basic Area 2008
+		\item Volkswagen Certified for 2007, 2008
+		\item Reached stage 3/5 of 2008 Volkswagen Service Qualification World Championship
+	\end{itemize}
+
+\end{itemize}
+
+
+\subsection*{Education}
+
+\begin{itemize}
+	\parskip=0.1em
+
+	\item 
+	\headerrow
+		{\textbf{California State University Chico}}
+		{\textbf{Chico, CA}}
+	\\
+	\headerrow
+		{\emph{B.S. Electrical Engineering}}
+		{\emph{2011 -- 2014}}
+	\begin{itemize}
+		\item Graduating Spring 2014.
+		\item Nominated to Phi Kappa Phi (2012).
+	\end{itemize}
+
+\end{itemize}
+
+\end{document}
